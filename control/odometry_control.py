@@ -7,7 +7,7 @@ class OdoControl(Event):
     """Odometry commands for a Raspberry Pi robot"""
 
     def __init__(self, run_method=None):
-    	super().__init__()
+        super().__init__()
         self.l_speed = 0.0
         self.r_speed = 0.0
         self.run_method = run_method 
@@ -27,7 +27,7 @@ class OdoControl(Event):
         return (self.l_speed, self.r_speed)
 
     def set_speeds(self, **kwargs):
-    	self.clear()
+        self.clear()
         for key, value in kwargs.items():
             if key == 'l_speed':
                 self.l_speed = value
@@ -82,21 +82,21 @@ class OdoControl(Event):
 
     def send_joystick_control(self, js_event):
         while True:
-        	self.clear()
+            self.clear()
             js_event.wait()
             self.js_axis_to_lr_speeds(js_event)
             if self.run_method:
-            	self.run_method((self.l_speed, self.r_speed))
+                self.run_method((self.l_speed, self.r_speed))
             #self.plot_state()
             js_event.clear()
             self.set()
 
     def receive_control(self, ctl_event):
         while True:
-        	self.clear()
+            self.clear()
             ctl_event.wait()
             if self.run_method:
-            	(self.l_speed, self.r_speed) = self.run_method()
+                (self.l_speed, self.r_speed) = self.run_method()
             #self.plot_state()
             ctl_event.clear()
             self.set()
