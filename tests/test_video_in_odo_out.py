@@ -34,8 +34,8 @@ def video_in(ip_address='127.0.0.1', video_port=8008):
 
 
 def main():
-    odomentry_proc = Process(target=odo_out, daemon=True)
-    video_proc = Process(target=video_in, daemon=True)
+    odomentry_proc = Process(target=odo_out, args=(8008,), daemon=True)
+    video_proc = Process(target=video_in, args=('192.168.0.9', 8000), daemon=True)
     odomentry_proc.start()
     video_proc.start()
 

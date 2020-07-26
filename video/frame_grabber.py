@@ -22,9 +22,9 @@ class FrameGrabber(Event):
     def connect_to_remote(self, ip_address, port, action='send'):
         """Connects to a remote machine to either send or receive messages"""
         if action == 'send':
-            self.sender = imagezmq.ImageSender(connect_to=f"tcp://{ip_address}:{port}", REQ_REP=False)
+            self.sender = imagezmq.ImageSender(connect_to="tcp://{}:{}".format(ip_address, port), REQ_REP=False)
         elif action == 'receive':
-            self.receiver = imagezmq.ImageHub(open_port=f"tcp://{ip_address}:{port}", REQ_REP = False)
+            self.receiver = imagezmq.ImageHub(open_port="tcp://{}:{}".format(ip_address, port), REQ_REP = False)
 
     def stream_out(self):
         while True:

@@ -22,7 +22,7 @@ class Socket(Event):
 
     def send(self, data):
         msg = pickle.dumps(data)
-        msg = f'{len(msg) :< {HEADERSIZE}}'.encode() + msg
+        msg = '{:< {}}'.format(len(msg), HEADERSIZE).encode() + msg
         self.sock.sendall(msg)
             
 
