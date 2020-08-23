@@ -10,15 +10,18 @@ class DiffDrive(Robot):
 
 	def go(self, l_speed, r_speed):
 		if abs(l_speed) < SPEED_THRESHOLD:
-			self.left_motor.stop()
+			left_func = lambda l_speed: self.left_motor.stop()
 		elif l_speed > 0:
-			self.left_motor.forward(l_speed)
+			left_func = lambda l_speed: self.left_motor.forward(l_speed)
 		elif l_speed < 0:
-			self.left_motor.backward(abs(l_speed))
+			left_func = lambda l_speed: self.left_motor.backward(-l_speed)
 
 		if abs(r_speed) < SPEED_THRESHOLD:
-			self.right_motor.stop()
+			right_func = lambda r_speed: self.right_motor.stop()
 		elif r_speed > 0:
-			self.right_motor.forward(r_speed)
-		elif l_speed < 0:
-			self.right_motor.backward(abs(r_speed))
+			right_func = lambda r_speed: self.right_motor.forward(r_speed)
+		elif r_speed < 0:
+			right_func = lambda r_speed: self.right_motor.backward(-r_speed)
+
+		left_func(l_speed)
+		right_func(r_speed)
