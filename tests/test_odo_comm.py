@@ -3,8 +3,9 @@ import socket
 import threading
 
 client = sc.Socket()
-port = 8008
-client.connect(socket.gethostname(), port)
+port = 8001
+print(port)
+client.connect('192.168.xx.xx', port)
 listener_thread = threading.Thread(target=client.recv_stream)
 listener_thread.start()
 while  True:
