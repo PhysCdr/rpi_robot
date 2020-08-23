@@ -7,7 +7,8 @@ import socket
 def main():
 	# set up the server
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	port = 8008
+	port = 8001
+	print(port)
 	s.bind(('', port))
 	s.listen(1)
 	clientsocket, address = s.accept()
