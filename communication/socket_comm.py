@@ -36,7 +36,6 @@ class Socket(Event):
                 for i in range(HEADERSIZE):
                     msg += self.sock.recv(1)
                 msg_len = int(msg)
-                print(msg_len)
                 new_msg = False
             else:
                 for i in range(msg_len):
