@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from threading import Event
 
 
+
 class OdoControl(Event):
     """Odometry commands for a Raspberry Pi robot"""
 
@@ -10,7 +11,7 @@ class OdoControl(Event):
         super().__init__()
         self.l_speed = 0.0
         self.r_speed = 0.0
-        self.run_method = run_method 
+        self.run_method = run_method
         self.clear()
 
         # plot attributes
@@ -49,7 +50,6 @@ class OdoControl(Event):
     #     self.fig.canvas.blit(self.ax.bbox)
     #     self.fig.canvas.flush_events()
 
-
     def js_axis_to_lr_speeds(self, joystick):
         """
         Convert the joystick axis state (x,y) to left and right motor speeds
@@ -69,16 +69,16 @@ class OdoControl(Event):
                 phi = 2 * np.pi + np.arctan(y / x)
 
         v = np.sqrt(x**2 + y**2)
+        if v > 1:
+        	v = 1
+
         phi_r = phi + np.pi / 4
         phi_l = phi - np.pi / 4
         heaviside = np.abs(np.cos(phi_r)) >= np.cos(np.pi / 4)
-        self.r_speed = -v * np.sign(np.cos(phi_r)) * heaviside - \
-                                    v * np.cos(phi_r) / \
-                                               np.cos(np.pi / 4) * (1 - heaviside)
+        self.r_speed = v * np.sign(np.cos(phi_r)) * heaviside + v * np.cos(phi_r) / np.cos(np.pi / 4) * (1 - heaviside)
         heaviside = np.abs(np.cos(phi_l)) >= np.cos(np.pi / 4)
-        self.l_speed = v * np.sign(np.cos(phi_l)) * heaviside + \
-                                   v * np.cos(phi_l) / np.cos(np.pi / 4) * \
-                                              (1 - heaviside)
+        self.l_speed = -v * np.sign(np.cos(phi_l)) * heaviside - v * np.cos(phi_l) / np.cos(np.pi / 4) * (1 - heaviside)
+        # self.plot_state()
 
     def send_joystick_control(self, js_event):
         while True:
@@ -87,7 +87,7 @@ class OdoControl(Event):
             self.js_axis_to_lr_speeds(js_event)
             if self.run_method:
                 self.run_method((self.l_speed, self.r_speed))
-            #self.plot_state()
+            # self.plot_state()
             js_event.clear()
             self.set()
 
@@ -97,6 +97,6 @@ class OdoControl(Event):
             ctl_event.wait()
             if self.run_method:
                 (self.l_speed, self.r_speed) = self.run_method()
-            #self.plot_state()
+            # self.plot_state()
             ctl_event.clear()
             self.set()
